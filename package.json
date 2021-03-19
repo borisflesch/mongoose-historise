@@ -1,7 +1,7 @@
 {
   "name": "mongoose-historise",
   "version": "0.9.0",
-  "description": "Keep track of all modifications history of your documents!",
+  "description": "Keep track of modifications history of your documents!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
