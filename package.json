@@ -18,6 +18,7 @@
   ],
   "author": "Boris Flesch",
   "license": "MIT",
+  "private": false,
   "bugs": {
     "url": "https://github.com/borisflesch/mongoose-historise/issues"
   },

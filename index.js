@@ -1,10 +1,11 @@
-import mongoose, { Schema } from "mongoose";
-import _ from "lodash";
+const mongoose = require("mongoose");
+const _ = require("lodash");
 
 module.exports = function (schema, options) {
     // Settings
     let {
-        mongooseModel,
+        mongooseInstance,
+        mongooseModelName,
         fieldnames,
         limit,
         order,
@@ -13,8 +14,8 @@ module.exports = function (schema, options) {
     } = options;
 
     // Default settings values
-    if (!mongooseModel) {
-        throw "Missing required parameter 'mongooseModel'";
+    if (!mongooseInstance && !mongooseModelName) {
+        throw "Parameters 'mongooseInstance' and 'mongooseModelName' required!";
     }
     fieldnames.history =  fieldnames.history ?? "history";
     fieldnames.timestamp =  fieldnames.timestamp ?? "timestamp";
@@ -22,20 +23,20 @@ module.exports = function (schema, options) {
     fieldnames.oldValue =  fieldnames.oldValue ?? "oldValue";
     fieldnames.newValue =  fieldnames.newValue ?? "newValue";
 
-    limit = Number(limit) ?? null;
+    limit = Number(limit) ?? false;
     order = (order == -1 || order == 1) ? order : -1;
     ignoreFields = ignoreFields ?? ['updatedAt', fieldnames.history];
     preventHistoryOverride = Boolean(preventHistoryOverride) ?? true;
 
 
     // Add Historise fields to schema
-    const fieldModification = new Schema({
+    const fieldModification = new mongoose.Schema({
         [fieldnames.field]: String,
-        [fieldnames.oldValue]: Schema.Types.Mixed,
-        [fieldnames.newValue]: Schema.Types.Mixed
+        [fieldnames.oldValue]: mongoose.Schema.Types.Mixed,
+        [fieldnames.newValue]: mongoose.Schema.Types.Mixed
     }, { _id: false });
 
-    const modifications = new Schema({
+    const modifications = new mongoose.Schema({
         [fieldnames.modifications]: [fieldModification],
         [fieldnames.timestamp]: { type: Date, default: Date.now() }
     }, { _id: false });
@@ -47,7 +48,10 @@ module.exports = function (schema, options) {
 
     // On document save, historise modifications
     schema.pre('save', async function (next) {
-        if (this.isModified("createdAt")) {
+        console.log(this.isModified("createdAt"));
+        console.log(!this.__v);
+        console.log(this.__v);
+        if (this.isModified("createdAt") || typeof this.__v === "undefined") {
             next(); // Skip on document creation
         } else {
             try {
@@ -55,7 +59,7 @@ module.exports = function (schema, options) {
                 const modifiedFields = this.directModifiedPaths();
 
                 // Current version in MongoDB (i.e. old)
-                const old = await mongoose.model(options.mongooseModel).findById(this._id);
+                const old = await mongooseInstance.model(mongooseModelName).findById(this._id);
 
                 // Historise modifications
                 const modifications = [];
