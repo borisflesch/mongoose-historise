@@ -1,5 +1,12 @@
 # mongoose-historise
 
+![License](https://img.shields.io/npm/l/mongoose-historise)
+![Version](https://img.shields.io/npm/v/mongoose-historise)
+
+![Star](https://img.shields.io/github/stars/borisflesch/mongoose-historise?style=social)
+![Watch](https://img.shields.io/github/watchers/borisflesch/mongoose-historise?style=social)
+![Fork](https://img.shields.io/github/forks/borisflesch/mongoose-historise?style=social)
+
 Keep track of modifications history of your documents!
 
 
@@ -42,12 +49,7 @@ After updating some fields (e.g. 'duration' and 'castOverview'), the 'history' i
         {
           field: 'castOverview',
           oldValue: [ 'Daniel Radcliffe', 'Rupert Grint', 'Richard Harris' ],
-          newValue: [
-            'Daniel Radcliffe',
-            'Rupert Grint',
-            'Richard Harris',
-            'Maggie Smith'
-          ]
+          newValue: [ 'Daniel Radcliffe', 'Rupert Grint', 'Richard Harris', 'Maggie Smith' ]
         }
       ]
     }
