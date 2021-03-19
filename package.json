@@ -1,0 +1,29 @@
+{
+  "name": "mongoose-historise",
+  "version": "0.9.0",
+  "description": "Keep track of all modifications history of your documents!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/borisflesch/mongoose-historise.git"
+  },
+  "keywords": [
+    "mongoose",
+    "history",
+    "modifications",
+    "versions"
+  ],
+  "author": "Boris Flesch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/borisflesch/mongoose-historise/issues"
+  },
+  "homepage": "https://github.com/borisflesch/mongoose-historise#readme",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "mongoose": "^5.12.1"
+  }
+}
