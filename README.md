@@ -19,7 +19,9 @@ $> npm test
 
 ## Why mongoose-historise?
 
-Historise helps you keep track of modifications within a document of any of your collections.
+Historise helps you keeping track of modifications within a document of any of your collections.
+
+Unlike several Mongoose versioning plugins which duplicates a document to store it as an archive when it is updated, **mongoose-historise stores a history of the modified fields directly within the document itself**.
 
 Example of a new "Movie" document:
 
@@ -66,11 +68,11 @@ After updating some fields (e.g. 'duration' and 'castOverview'), the 'history' i
 ```
 
 
-## Basic usage
+## Quick Start
 
 > **WARNING**: mongoose-historise can generate history only on 'save' operation due to Mongoose limitations. If you want to use it, please use 'save' instead of 'update' operations to properly historise modifications made to your documents.
 
-When creating your Mongoose Model, simply add mongoose-historise plugin:
+When creating your Mongoose Model, simply add mongoose-historise plugin (more options available in the section below):
 
 ```js
 const mongoose = require("mongoose");
@@ -85,30 +87,16 @@ const schema = new mongoose.Schema({
     releaseDate: Date,
 });
 
-schema.plugin(historise, {
-    mongooseInstance: mongoose,
-    mongooseModelName: "Movie",
-    fieldnames: {
-        history: "history",
-        modifications: "modifications",
-        timestamp: "timestamp",
-        field: "field",
-        oldValue: "oldValue",
-        newValue: "newValue"
-    },
-    limit: 5,
-    order: -1,
-});
+schema.plugin(historise, { mongooseInstance: mongoose, mongooseModelName: "Movie", });
 
 const Movie = mongoose.model("Movie", schema);
-
 module.exports = Movie;
 ```
 
 
 ## Options
 
-Currently, the following options are available for mongoose-historise (default values indicated):
+Currently, the following options are available for mongoose-historise (default values indicated, only 'mongooseInstance' and 'mongooseModelName' are required):
 
 ```js
 {
@@ -133,7 +121,7 @@ Currently, the following options are available for mongoose-historise (default v
 
 ## History structure
 
-The History of a document is automatically generated based on fields that have been modified when saving a document. It adds the following structure to your Mongoose Model:
+The history of a document is automatically generated based on fields that have been modified when saving a document. This plugin adds the following structure to your Mongoose Model:
 
 ```js
 {
