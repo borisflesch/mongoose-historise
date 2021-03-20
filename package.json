@@ -4,7 +4,8 @@
   "description": "Keep track of modifications history of your documents!",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon --exec 'mocha'"
+    "test": "mocha --exit",
+    "lint": "eslint ./index.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "mongoose": "^5.12.1"
   },
   "devDependencies": {
+    "eslint": "^7.22.0",
     "mocha": "^8.3.2",
     "request": "^2.88.2"
   }
