@@ -1,6 +1,6 @@
 {
   "name": "mongoose-historise",
-  "version": "0.10.0",
+  "version": "1.0.0",
   "description": "Keep track of modifications history of your documents!",
   "main": "index.js",
   "scripts": {
