@@ -26,12 +26,12 @@ module.exports = function (schema, options) {
         newValue: "newValue"
     };
     fieldnames = fieldnames ?? defaultFieldnames;
-    fieldnames.history =  fieldnames.history ?? defaultFieldnames.history;
-    fieldnames.modifications =  fieldnames.modifications ?? defaultFieldnames.modifications;
-    fieldnames.timestamp =  fieldnames.timestamp ?? defaultFieldnames.timestamp;
-    fieldnames.field =  fieldnames.field ?? defaultFieldnames.field;
-    fieldnames.oldValue =  fieldnames.oldValue ?? defaultFieldnames.oldValue;
-    fieldnames.newValue =  fieldnames.newValue ?? defaultFieldnames.newValue;
+    fieldnames.history = fieldnames.history ?? defaultFieldnames.history;
+    fieldnames.modifications = fieldnames.modifications ?? defaultFieldnames.modifications;
+    fieldnames.timestamp = fieldnames.timestamp ?? defaultFieldnames.timestamp;
+    fieldnames.field = fieldnames.field ?? defaultFieldnames.field;
+    fieldnames.oldValue = fieldnames.oldValue ?? defaultFieldnames.oldValue;
+    fieldnames.newValue = fieldnames.newValue ?? defaultFieldnames.newValue;
 
     limit = Number(limit) ?? false;
     order = (order == -1 || order == 1) ? order : -1;
