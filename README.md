@@ -27,8 +27,8 @@ Example of a new "Movie" document:
 
 ```js
 {
-  castOverview: [ 'Daniel Radcliffe', 'Rupert Grint', 'Richard Harris' ],
   _id: 6055282e4992b599b0874155,
+  castOverview: [ 'Daniel Radcliffe', 'Rupert Grint', 'Richard Harris' ],
   title: "Harry Potter and the Sorcerer's Stone",
   duration: '2h32min',
   director: 'Chris Columbus',
@@ -39,12 +39,12 @@ Example of a new "Movie" document:
 }
 ```
 
-After updating some fields (e.g. 'duration' and 'castOverview'), the 'history' is automatically updated as follows:
+After updating some fields (e.g. 'duration' and 'castOverview') and saving the document, the 'history' is automatically updated as follows:
 
 ```js
 {
-  castOverview: [ 'Daniel Radcliffe', 'Rupert Grint', 'Richard Harris', 'Maggie Smith' ],
   _id: 6055282e4992b599b0874155,
+  castOverview: [ 'Daniel Radcliffe', 'Rupert Grint', 'Richard Harris', 'Maggie Smith' ],
   title: "Harry Potter and the Sorcerer's Stone",
   duration: '2:32',
   director: 'Chris Columbus',
@@ -130,7 +130,7 @@ The history of a document is automatically generated based on fields that have b
             timestamp: Date
             modifications: [
                 {
-                    field: String, // Name of the field modified (works with deep/nested fields)
+                    field: String, // Name of the field modified (also works with deep/nested fields)
                     oldValue: Mixed, // Previous value of that field
                     newValue: Mixed // New value of that field
                 },
