@@ -10,7 +10,14 @@
 Keep track of modifications history of your documents!
 
 
-## What does mongoose-historise do?
+## Install & Test
+
+```
+$> npm i mongoose-historise
+$> npm test
+```
+
+## Why mongoose-historise?
 
 Historise helps you keep track of modifications within a document of any of your collections.
 
@@ -61,7 +68,7 @@ After updating some fields (e.g. 'duration' and 'castOverview'), the 'history' i
 
 ## Basic usage
 
-> **WARNING**: mongoose-historise can generated history only on 'save' operation due to Mongoose 'pre' hooks limitations. If you want to use it, please replace 'update' operations by 'save' to make it work properly.
+> **WARNING**: mongoose-historise can generate history only on 'save' operation due to Mongoose limitations. If you want to use it, please use 'save' instead of 'update' operations to properly historise modifications made to your documents.
 
 When creating your Mongoose Model, simply add mongoose-historise plugin:
 
@@ -101,16 +108,16 @@ module.exports = Movie;
 
 ## Options
 
-Currently, the following options are available for mongoose-historise (default values are indicated):
+Currently, the following options are available for mongoose-historise (default values indicated):
 
 ```js
 {
-    // mongoose instance, required to use & update history of your model
+    // Mongoose instance, required to interact with your Mongoose model
     mongooseInstance: mongoose,
     // Name of your model (string)
     mongooseModelName: "Model",
     // Names of all fields in which history will be stored (see history structure below)
-    fieldnames: { // Name
+    fieldnames: {
         history: "history",
         modifications: "modifications",
         timestamp: "timestamp",
@@ -119,7 +126,7 @@ Currently, the following options are available for mongoose-historise (default v
         newValue: "newValue"
     },
     limit: false, // False: no history limits; fill-in a number to indicate the maximum number of 'history' to store
-    order: -1, // -1: last modifications will appear at the beginning of the array; 1: last modifications will appear at the end
+    order: -1, // -1: Reverse chronological order (last modifications at the beginning); 1: Chronological order (last modifications at the end)
     ignore: ['createdAt', 'history'] // Ignore the mentioned fields when generating and storing the history
 }
 ```

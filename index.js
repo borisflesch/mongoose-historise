@@ -17,11 +17,21 @@ module.exports = function (schema, options) {
     if (!mongooseInstance && !mongooseModelName) {
         throw "Parameters 'mongooseInstance' and 'mongooseModelName' required!";
     }
-    fieldnames.history =  fieldnames.history ?? "history";
-    fieldnames.timestamp =  fieldnames.timestamp ?? "timestamp";
-    fieldnames.field =  fieldnames.field ?? "field";
-    fieldnames.oldValue =  fieldnames.oldValue ?? "oldValue";
-    fieldnames.newValue =  fieldnames.newValue ?? "newValue";
+    const defaultFieldnames = {
+        history: "history",
+        modifications: "modifications",
+        timestamp: "timestamp",
+        field: "field",
+        oldValue: "oldValue",
+        newValue: "newValue"
+    };
+    fieldnames = fieldnames ?? defaultFieldnames;
+    fieldnames.history =  fieldnames.history ?? defaultFieldnames.history;
+    fieldnames.modifications =  fieldnames.modifications ?? defaultFieldnames.modifications;
+    fieldnames.timestamp =  fieldnames.timestamp ?? defaultFieldnames.timestamp;
+    fieldnames.field =  fieldnames.field ?? defaultFieldnames.field;
+    fieldnames.oldValue =  fieldnames.oldValue ?? defaultFieldnames.oldValue;
+    fieldnames.newValue =  fieldnames.newValue ?? defaultFieldnames.newValue;
 
     limit = Number(limit) ?? false;
     order = (order == -1 || order == 1) ? order : -1;
@@ -48,9 +58,6 @@ module.exports = function (schema, options) {
 
     // On document save, historise modifications
     schema.pre('save', async function (next) {
-        console.log(this.isModified("createdAt"));
-        console.log(!this.__v);
-        console.log(this.__v);
         if (this.isModified("createdAt") || typeof this.__v === "undefined") {
             next(); // Skip on document creation
         } else {
@@ -91,7 +98,7 @@ module.exports = function (schema, options) {
 
                         // Keep max `limit` last modifications
                         if (limit && this[fieldnames.history].length > limit) {
-                            this[fieldnames.history] = this[fieldnames.history].slice(limit, this[fieldnames.history].length);
+                            this[fieldnames.history] = this[fieldnames.history].slice(this[fieldnames.history].length - limit, this[fieldnames.history].length);
                         }
                     } else {
                         // Last modifications at the beginning
