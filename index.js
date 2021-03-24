@@ -58,7 +58,9 @@ module.exports = function (schema, options) {
 
     // On document save, historise modifications
     schema.pre('save', async function (next) {
-        if (this.isModified("createdAt") || typeof this.__v === "undefined") {
+        if (this.isModified("createdAt")
+            || (schema.options.versionKey
+                && typeof this[schema.options.versionKey] === "undefined")) {
             next(); // Skip on document creation
         } else {
             try {
