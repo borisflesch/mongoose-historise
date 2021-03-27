@@ -1,7 +1,7 @@
 const assert = require("assert");
 const mongoose = require("mongoose");
 const _ = require("lodash");
-const historise = require("./../index");
+const historise = require("../index");
 
 // Movie model
 const schema = new mongoose.Schema({

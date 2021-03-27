@@ -4,7 +4,7 @@
   "description": "Keep track of modifications history of your documents!",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "mocha ./test/0_init.js --exit",
     "lint": "eslint ./index.js"
   },
   "repository": {

@@ -9,8 +9,7 @@ module.exports = function (schema, options) {
         fieldnames,
         limit,
         order,
-        ignoreFields,
-        preventHistoryOverride
+        ignoreFields
     } = options;
 
     // Default settings values
@@ -35,9 +34,7 @@ module.exports = function (schema, options) {
 
     limit = Number(limit) ?? false;
     order = (order == -1 || order == 1) ? order : -1;
-    ignoreFields = ignoreFields ?? ['updatedAt', fieldnames.history];
-    preventHistoryOverride = Boolean(preventHistoryOverride) ?? true;
-
+    ignoreFields = ignoreFields ?? ['updatedAt', '__v', fieldnames.history];
 
     // Add Historise fields to schema
     const fieldModification = new mongoose.Schema({
@@ -55,12 +52,9 @@ module.exports = function (schema, options) {
         [fieldnames.history]: [modifications] // Dynamic key name
     });
 
-
     // On document save, historise modifications
     schema.pre('save', async function (next) {
-        if (this.isModified("createdAt")
-            || (schema.options.versionKey
-                && typeof this[schema.options.versionKey] === "undefined")) {
+        if (this.isNew) {
             next(); // Skip on document creation
         } else {
             try {
@@ -85,9 +79,7 @@ module.exports = function (schema, options) {
                 }
 
                 // Prevent manual overwrite of modifications (i.e. overwrite provided 'history' field)
-                if (preventHistoryOverride) {
-                    this[fieldnames.history] = old[fieldnames.history];
-                }
+                this[fieldnames.history] = old[fieldnames.history];
 
                 // Store modifications (if there are any)
                 if (modifications.length > 0) {

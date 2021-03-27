@@ -1,7 +1,7 @@
 const assert = require("assert");
 const mongoose = require("mongoose");
 const _ = require("lodash");
-const historise = require("./../index");
+const historise = require("../index");
 
 // Movie model
 const schema = new mongoose.Schema({
@@ -15,7 +15,6 @@ schema.plugin(historise, {
     mongooseInstance: mongoose, // Mongoose instance (to fetch model)
     mongooseModelName: "Movie", // Model that will be used by the plugin
     order: 1, // chronological order
-    limit: 5, // max. 5 history items
 });
 
 mongoose.models = {}; // Remove existing models
@@ -23,7 +22,7 @@ const Movie = mongoose.model("Movie", schema);
 let movie = null;
 
 // Tests
-describe('Test chronological order history with limit (max. 5 history items)', () => {
+describe('Test chronological order history', () => {
     it('Drops database', (done) => {
         mongoose.connection.db.dropDatabase(() => {
             done();
@@ -80,19 +79,23 @@ describe('Test chronological order history with limit (max. 5 history items)', (
         done();
     });
 
-    it('Adds modifications with limit (5)', async () => {
+    it('Adds modifications without limit (random title)', async () => {
         for (let i = 0; i < 20; i++) {
             const oldTitle = movie.title;
             const newTitle = Math.random().toString(36).substring(7);
             movie.title = newTitle;
 
             movie = await movie.save();
-            assert(movie.history.length === Math.min(i + 3, 5));
-            assert(movie.history[movie.history.length - 1].modifications.length === 1);
+            assert(movie.history.length === i + 3);
+            assert(movie.history[i + 2].modifications.length === 1);
 
-            assert(movie.history[movie.history.length - 1].modifications[0].field === "title");
-            assert(movie.history[movie.history.length - 1].modifications[0].oldValue === oldTitle);
-            assert(movie.history[movie.history.length - 1].modifications[0].newValue === newTitle);
+            assert(movie.history[i + 2].modifications[0].field === "title");
+            assert(movie.history[i + 2].modifications[0].oldValue === oldTitle);
+            assert(movie.history[i + 2].modifications[0].newValue === newTitle);
         }
+    });
+
+    it('Runs following test file', () => {
+        require('./3_limit_chronological_test');
     });
 });

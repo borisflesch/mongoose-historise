@@ -8,3 +8,5 @@ mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 
 mongoose.connect(url);
+
+require('./1_default_test');
