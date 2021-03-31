@@ -9,6 +9,7 @@ module.exports = function (schema, options) {
         fieldnames,
         limit,
         order,
+        deepComparison,
         ignoreFields
     } = options;
 
@@ -22,7 +23,7 @@ module.exports = function (schema, options) {
         timestamp: "timestamp",
         field: "field",
         oldValue: "oldValue",
-        newValue: "newValue"
+        newValue: "newValue",
     };
     fieldnames = fieldnames ?? defaultFieldnames;
     fieldnames.history = fieldnames.history ?? defaultFieldnames.history;
@@ -34,6 +35,7 @@ module.exports = function (schema, options) {
 
     limit = Number(limit) ?? false;
     order = (order == -1 || order == 1) ? order : -1;
+    deepComparison = typeof deepComparison === "boolean" ?? true;
     ignoreFields = ignoreFields ?? ['updatedAt', '__v', fieldnames.history];
 
     // Add Historise fields to schema
@@ -71,10 +73,18 @@ module.exports = function (schema, options) {
                         continue;
                     }
 
+                    const oldValue = _.get(old, modifiedField);
+                    const newValue = _.get(this, modifiedField);
+
+                    // Deep objects comparison
+                    if (deepComparison && JSON.stringify(oldValue) === JSON.stringify(newValue)) {
+                        continue;
+                    }
+
                     modifications.push({
                         [fieldnames.field]: modifiedField,
-                        [fieldnames.oldValue]: _.get(old, modifiedField),
-                        [fieldnames.newValue]: _.get(this, modifiedField)
+                        [fieldnames.oldValue]: oldValue,
+                        [fieldnames.newValue]: newValue
                     });
                 }
 

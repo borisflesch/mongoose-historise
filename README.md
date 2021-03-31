@@ -115,6 +115,7 @@ Currently, the following options are available for mongoose-historise (default v
     },
     limit: false, // False: no history limits; fill-in a number to indicate the maximum number of 'history' to store
     order: -1, // -1: Reverse chronological order (last modifications at the beginning); 1: Chronological order (last modifications at the end)
+    deepComparison: true, // Enables deep comparison of objects (preventing reference comparison) using JSON.stringify(). Disable to increase speed if your collection does not use nested/sub-documents.
     ignore: ['createdAt', '__v', 'history'] // Ignore the mentioned fields when generating and storing the history
 }
 ```
