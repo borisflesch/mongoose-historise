@@ -35,7 +35,7 @@ module.exports = function (schema, options) {
 
     limit = Number(limit) ?? false;
     order = (order == -1 || order == 1) ? order : -1;
-    deepComparison = typeof deepComparison === "boolean" ?? true;
+    deepComparison = typeof deepComparison === "boolean" ? deepComparison : true;
     ignoreFields = ignoreFields ?? ['updatedAt', '__v', fieldnames.history];
 
     // Add Historise fields to schema
